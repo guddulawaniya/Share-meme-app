@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
                         target: Target<Drawable>?,
                         isFirstResource: Boolean
                     ): Boolean {
-                        progressBar.visibility = View.GONE
+                        progressBar.visibility = View.VISIBLE
                         return false
                     }
 
