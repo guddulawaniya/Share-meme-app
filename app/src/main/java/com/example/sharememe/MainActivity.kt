@@ -1,9 +1,14 @@
 package com.example.sharememe
 
 import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.media.Image
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
@@ -15,14 +20,32 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.squareup.picasso.Picasso
 
 var currentimageurl: String? = null
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         loadmeme()
+        val imageView = findViewById<ImageView>(R.id.memeimageView)
+        val sharebutton = findViewById<Button>(R.id.sharebutton)
+
+        sharebutton.setOnClickListener{
+
+            val bitmapDrawable = imageView.drawable as BitmapDrawable
+            val bitmap = bitmapDrawable.bitmap
+            val bitmappath = MediaStore.Images.Media.insertImage(contentResolver,
+                bitmap,"some title",null)
+            val bitmapUri = Uri.parse(bitmappath)
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "image/text"
+            intent.putExtra(Intent.EXTRA_TEXT,"Hey Checkout Thia Cool Meme I got From Reddit $currentimageurl")
+            intent.putExtra(Intent.EXTRA_STREAM,bitmapUri)
+            startActivity(Intent.createChooser(intent,"Share Image this Meme"))
+        }
     }
 
     private fun loadmeme() {
@@ -30,6 +53,8 @@ class MainActivity : AppCompatActivity() {
         progressBar.visibility = View.VISIBLE
         val url ="https://meme-api.herokuapp.com/gimme"
         val memeimage = findViewById<ImageView>(R.id.memeimageView)
+
+
 
         val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
             Response.Listener { response ->
@@ -72,12 +97,5 @@ class MainActivity : AppCompatActivity() {
     fun nextmeme(view: View) {
 
         loadmeme()
-    }
-    fun sharebutton(view: View) {
-
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_TEXT,"Hey Checkout This cool Meme i got From Reddit $currentimageurl")
-        startActivity(Intent.createChooser(intent, "Share Image this Meme"))
     }
 }
