@@ -36,7 +36,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/sharebutton"
-        android:onClick="sharebutton"
         android:padding="15dp"
         android:text="share"
         android:textColor="@color/white"
