@@ -5,11 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.WindowManager
 
 class Splashscreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splashscreen)
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         supportActionBar?.hide()
         waitforload()
@@ -24,7 +27,7 @@ class Splashscreen : AppCompatActivity() {
     private fun waitforload(){
         Handler(Looper.getMainLooper()).postDelayed({
            nextcellactivity()
-        }, 3000)
+        }, 5000)
     }
 }
 

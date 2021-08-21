@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.view.animation.Animation
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -49,7 +50,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadmeme() {
-        val progressBar = findViewById<ProgressBar>(R.id.progressbar)
+        val progressBar = findViewById<View>(R.id.progressbar)
         progressBar.visibility = View.VISIBLE
         val url ="https://meme-api.herokuapp.com/gimme"
         val memeimage = findViewById<ImageView>(R.id.memeimageView)
@@ -57,7 +58,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
-            Response.Listener { response ->
+            { response ->
                 currentimageurl = response.getString("url")
                 Glide.with(this).load(currentimageurl).listener(object: RequestListener<Drawable>{
                     override fun onLoadFailed(
@@ -84,7 +85,7 @@ class MainActivity : AppCompatActivity() {
 
 
             },
-            Response.ErrorListener { error ->
+            { error ->
                 // TODO: Handle error
             }
         )
