@@ -7,11 +7,14 @@ import android.media.Image
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.Animation
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.Response
@@ -22,17 +25,25 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.squareup.picasso.Picasso
+import kotlin.math.abs
 
 var currentimageurl: String? = null
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), GestureDetector.OnGestureListener{
+
+    private val swipeThreshold = 100
+    private val swipeVelocityThreshold = 100
+    private lateinit var gestureDetector: GestureDetector
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         loadmeme()
         val imageView = findViewById<ImageView>(R.id.memeimageView)
-        val sharebutton = findViewById<Button>(R.id.sharebutton)
+        val sharebutton = findViewById<ImageView>(R.id.sharebutton)
+        gestureDetector = GestureDetector(this);
+
+
 
         sharebutton.setOnClickListener{
 
@@ -60,6 +71,7 @@ class MainActivity : AppCompatActivity() {
         val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->
                 currentimageurl = response.getString("url")
+
                 Glide.with(this).load(currentimageurl).listener(object: RequestListener<Drawable>{
                     override fun onLoadFailed(
                         e: GlideException?,
@@ -95,8 +107,59 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun nextmeme(view: View) {
-
-        loadmeme()
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        return if (gestureDetector.onTouchEvent(event)) {
+            true
+        }
+        else {
+            super.onTouchEvent(event)
+        }
     }
+
+    override fun onDown(p0: MotionEvent?): Boolean {
+        return false
+    }
+
+    override fun onShowPress(p0: MotionEvent?) {
+        return
+    }
+
+    override fun onSingleTapUp(p0: MotionEvent?): Boolean {
+        return false
+    }
+
+    override fun onScroll(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
+
+
+        return false
+    }
+
+    override fun onLongPress(p0: MotionEvent?) {
+        return
+    }
+
+    override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+        try {
+            val diffY = e2.y - e1.y
+            val diffX = e2.x - e1.x
+            if (abs(diffX) > abs(diffY)) {
+                if (abs(diffX) > swipeThreshold && abs(velocityX) > swipeVelocityThreshold) {
+                    if(diffX>0)
+                    {
+                        loadmeme()
+                    }
+                    else
+                    {
+                        loadmeme()
+                    }
+                }
+            }
+        }
+        catch (exception: Exception) {
+            exception.printStackTrace()
+        }
+        return true
+    }
+
+
 }

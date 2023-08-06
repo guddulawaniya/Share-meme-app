@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".Splashscreen">
 
     <com.airbnb.lottie.LottieAnimationView
@@ -27,7 +28,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="10dp"
         android:text="Develpor by : G.k.lawaniya "
-        android:textColor="#95494949"
+        android:textColor="#D5973C"
         android:textSize="16sp"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"

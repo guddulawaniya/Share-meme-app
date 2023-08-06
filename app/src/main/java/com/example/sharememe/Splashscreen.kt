@@ -27,7 +27,7 @@ class Splashscreen : AppCompatActivity() {
     private fun waitforload(){
         Handler(Looper.getMainLooper()).postDelayed({
            nextcellactivity()
-        }, 2000)
+        }, 3000)
     }
 }
 
